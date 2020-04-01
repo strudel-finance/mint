@@ -8,7 +8,7 @@ import {
   validateIsFunction,
   validateIsString,
 } from '@pie-dao/utils';
-import { store } from 'react-easy-state';
+import { store } from '@risingstack/react-easy-state';
 
 const exampleTokenConfig = {
   address: '0x...',
@@ -72,6 +72,12 @@ const mint = store({
     tokens,
   }) => {
     const prefix = logPrefix('init');
+    const { account } = eth;
+
+    if (!account) {
+      throw new Error(`${prefix} should not be called without an account`);
+    }
+
     if (mint.initialized) {
       throw new Error(`${prefix} is already initialized`);
     }
@@ -96,18 +102,42 @@ const mint = store({
     }
     mint.tokens = { ...tokens };
 
-    keys.forEach((key) => {
-      const { address } = tokens[key];
-      mint.tokens[key].balance = BigNumber(0);
-      const uuid = `${eth.account}.${address}.balance`;
-
-      database.subscribe(uuid, ({ balance }) => {
-        console.log('balance update', uuid, BigNumber(balance).toString());
-        mint.tokens[key].balance = balance;
-      });
+    eth.on('accountChanged', (message, data) => {
+      mint.initializeTokens(data.account);
     });
 
+    mint.initializeTokens(account);
+
     mint.initialized = true;
+  },
+  initializeTokens: (account) => {
+    const keys = Object.keys(mint.tokens);
+    const { database } = internal;
+
+    keys.forEach((key) => {
+      if (mint.tokens[key].balanceSubscription) {
+        database.unsubscribe(mint.tokens[key].balanceSubscription);
+      }
+
+      mint.tokens[key].balance = BigNumber(0);
+
+      const { address } = mint.tokens[key];
+      const uuid = `${account}.${address}.balance`;
+
+      mint.tokens[key].balanceSubscription = database.subscribe(uuid, (message, { balance }) => {
+        console.log('balance update received', message, balance.toString());
+        if (message.split('.')[0] === eth.account.toLowerCase()) {
+          console.log('balance update', message, balance.toString());
+          mint.tokens[key].balance = balance;
+        }
+      });
+
+      setTimeout(() => {
+        database.balance({ address: account, token: address });
+      }, 1000);
+    });
+
+    console.log('TOKENS', mint.tokens);
   },
   sliderChange: (value) => {
     mint.slider = value.toFixed();

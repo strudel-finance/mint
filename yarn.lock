@@ -894,8 +894,8 @@
 "@pie-dao/blockchain@file:../blockchain":
   version "1.0.0"
   dependencies:
-    "@pie-dao/abis" "file:../../.cache/yarn/v4/npm-@pie-dao-blockchain-1.0.0-b44fde72-c963-4bef-be03-98d286b74a6e-1585665595807/node_modules/@pie-dao/abis"
-    "@pie-dao/utils" "file:../../.cache/yarn/v4/npm-@pie-dao-blockchain-1.0.0-b44fde72-c963-4bef-be03-98d286b74a6e-1585665595807/node_modules/@pie-dao/utils"
+    "@pie-dao/abis" "file:../../.cache/yarn/v4/npm-@pie-dao-blockchain-1.0.0-e4f3095d-3e2b-4c1a-8529-e5175b95882c-1585775658007/node_modules/@pie-dao/abis"
+    "@pie-dao/utils" "file:../../.cache/yarn/v4/npm-@pie-dao-blockchain-1.0.0-e4f3095d-3e2b-4c1a-8529-e5175b95882c-1585775658007/node_modules/@pie-dao/utils"
     bignumber.js "^9.0.0"
     bnc-sdk "^1.1.0"
     ethers "^4.0.46"
@@ -914,10 +914,11 @@
 "@pie-dao/eth@file:../eth":
   version "1.0.0"
   dependencies:
-    "@pie-dao/abis" "file:../../.cache/yarn/v4/npm-@pie-dao-eth-1.0.0-eec22150-a077-4c68-bbe5-b2a21b609083-1585665596308/node_modules/@pie-dao/abis"
+    "@pie-dao/abis" "file:../../.cache/yarn/v4/npm-@pie-dao-eth-1.0.0-f1b5c289-c633-4c5c-94b2-dbec50516395-1585775658087/node_modules/@pie-dao/abis"
     "@pie-dao/eth-tailwind" "1.0.0"
     "@pie-dao/if-unless" "^1.0.1"
-    "@pie-dao/utils" "file:../../.cache/yarn/v4/npm-@pie-dao-eth-1.0.0-eec22150-a077-4c68-bbe5-b2a21b609083-1585665596308/node_modules/@pie-dao/utils"
+    "@pie-dao/utils" "file:../../.cache/yarn/v4/npm-@pie-dao-eth-1.0.0-f1b5c289-c633-4c5c-94b2-dbec50516395-1585775658087/node_modules/@pie-dao/utils"
+    "@risingstack/react-easy-state" "^6.2.0"
     bignumber.js "^9.0.0"
     bnc-notify "^1.1.0"
     eth-provider "^0.2.5"
@@ -928,7 +929,6 @@
     pubsub-js "^1.8.0"
     react "^16.13.0"
     react-dom "^16.13.0"
-    react-easy-state "^6.1.3"
     simpleid-js-sdk "^1.1.0"
     styled-components "^5.0.1"
     tailwindcss "^1.2.0"
@@ -951,6 +951,13 @@
     is-plain-object "^3.0.0"
     promise.allsettled "^1.0.2"
     regenerator-runtime "^0.13.5"
+
+"@risingstack/react-easy-state@^6.2.0":
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/@risingstack/react-easy-state/-/react-easy-state-6.2.0.tgz#afdda8c26b1672cb87b7f17ba3fc67165e3a2735"
+  integrity sha512-LCLd+1LPpYIie4ivZIoPIDotb0hUVYLroS7bUcyaUihTbgAGs8vc/4qaXSb51JnM0D2ugr9Cfe5+vq8TXnUf3w==
+  dependencies:
+    "@nx-js/observer-util" "^4.2.2"
 
 "@types/color-name@^1.1.1":
   version "1.1.1"

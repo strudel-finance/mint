@@ -18,12 +18,12 @@
     "@pie-dao/blockchain": "file:../blockchain",
     "@pie-dao/eth": "file:../eth",
     "@pie-dao/utils": "file:../utils",
+    "@risingstack/react-easy-state": "^6.2.0",
     "bignumber.js": "^9.0.0",
     "prop-types": "^15.7.2",
     "rc-slider": "^9.2.4",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
-    "react-easy-state": "^6.1.3",
     "recharts": "^1.8.5"
   },
   "devDependencies": {
