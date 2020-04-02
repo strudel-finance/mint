@@ -26,7 +26,6 @@ const logPrefix = (functionName) => `@pie-dao/mint - mint#${functionName}`;
 
 const validateTokenConfig = (name, obj, skipWeight = false) => {
   const prefix = '@pie-dao/mint - isTokenConfig';
-  console.log(prefix, name, obj);
 
   if (!isPOJO(obj)) {
     const message = `${prefix}: Missing or invalid token config object for ${name}`;
@@ -58,12 +57,18 @@ const mint = store({
   initialized: false,
   mintable: undefined,
   slider: 0,
-  submit: () => {},
+  submit: () => {
+    throw new Error(
+      `${logPrefix('submit')} is not implemented. Please pass it to ${logPrefix('init')}`,
+    );
+  },
   tokens: {},
 
-  amount: (token) => {
+  amount: (token, decimalShift) => {
     const { slider, tokens } = mint;
-    return BigNumber(slider).multipliedBy(tokens[token].amountPerUnit);
+    return BigNumber(slider)
+      .multipliedBy(tokens[token].amountPerUnit)
+      .dividedBy(10 ** decimalShift);
   },
   init: ({
     database,
@@ -84,7 +89,7 @@ const mint = store({
     internal.database = database;
 
     validateIsFunction(submit, { prefix, message: '\'submit\' is not a function.' });
-    internal.submit = submit;
+    mint.submit = submit;
 
     validateTokenConfig('mintable', mintable, true);
     mint.mintable = mintable;
@@ -125,9 +130,7 @@ const mint = store({
       const uuid = `${account}.${address}.balance`;
 
       mint.tokens[key].balanceSubscription = database.subscribe(uuid, (message, { balance }) => {
-        console.log('balance update received', message, balance.toString());
         if (message.split('.')[0] === eth.account.toLowerCase()) {
-          console.log('balance update', message, balance.toString());
           mint.tokens[key].balance = balance;
         }
       });
@@ -136,20 +139,21 @@ const mint = store({
         database.balance({ address: account, token: address });
       }, 1000);
     });
-
-    console.log('TOKENS', mint.tokens);
   },
   sliderChange: (value) => {
-    mint.slider = value.toFixed();
+    mint.slider = value;
   },
-  sliderMax: () => {
+  sliderMax: (decimalShift = 0) => {
     const { tokens } = mint;
 
     return Object.keys(tokens).reduce((acc, key) => {
       const { amountPerUnit, balance } = tokens[key];
       const localMax = balance.dividedBy(amountPerUnit);
       return localMax.isLessThan(acc) ? localMax : acc;
-    }, BigNumber(10000)).decimalPlaces(0).toNumber();
+    }, BigNumber(10000))
+      .multipliedBy(10 ** decimalShift)
+      .decimalPlaces(0)
+      .toNumber();
   },
 });
 

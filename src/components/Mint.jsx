@@ -1,4 +1,5 @@
 /* eslint jsx-a11y/no-static-element-interactions: 0 */
+import BigNumber from 'bignumber.js';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Slider from 'rc-slider';
@@ -13,6 +14,7 @@ import mint from '../store';
 const Mint = ({
   config: {
     mint: {
+      decimalPlaces,
       step,
     },
   },
@@ -30,6 +32,7 @@ const Mint = ({
     slider,
     sliderChange,
     sliderMax,
+    submit,
     tokens,
   } = mint;
 
@@ -44,29 +47,38 @@ const Mint = ({
     return '';
   }
 
+  const displayAmount = BigNumber(slider).dividedBy(10 ** decimalPlaces).toString();
+  const sliderStep = BigNumber(step).multipliedBy(10 ** decimalPlaces).toNumber();
   const { symbol } = mintable;
 
-  const max = sliderMax();
-  console.log('MAX', max);
+  const max = sliderMax(decimalPlaces);
 
   return (
     <div className="mint-container">
       <div className="left">
         <div className="amount">
-          {slider}
+          {displayAmount}
         </div>
         <div className="symbol">{symbol}</div>
         <div className="slider-wrapper">
           <Slider
             min={0}
             max={max}
-            step={step}
+            step={sliderStep}
             onChange={sliderChange}
             value={slider}
             vertical={false}
           />
         </div>
-        <button type="button" className="btn">
+        <button
+          type="button"
+          className="btn"
+          onClick={(e) => {
+            e.preventDefault();
+            console.log('firing submit');
+            submit();
+          }}
+        >
           {verb}
           &nbsp;
           {descriptor}
@@ -85,7 +97,9 @@ const Mint = ({
           </div>
         </div>
         <div className="column">
-          {Object.keys(tokens).map((key) => <Asset database={database} key={key} token={key} />)}
+          {Object.keys(tokens).map((key) => (
+            <Asset database={database} key={key} token={key} decimalShift={decimalPlaces} />
+          ))}
         </div>
       </div>
     </div>
@@ -95,6 +109,7 @@ const Mint = ({
 Mint.defaultProps = {
   config: {
     mint: {
+      decimalPlaces: 0,
       step: 0.1,
     },
   },
@@ -110,6 +125,7 @@ Mint.defaultProps = {
 Mint.propTypes = {
   config: PropTypes.shape({
     mint: PropTypes.shape({
+      decimalPlaces: PropTypes.number,
       step: PropTypes.number,
     }),
   }),

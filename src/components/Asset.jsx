@@ -2,59 +2,13 @@ import BigNumber from 'bignumber.js';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// import { BlockchainDatabase } from '@pie-dao/blockchain';
-// import { eth } from '@pie-dao/eth';
 import { view } from '@risingstack/react-easy-state';
 
 import mint from '../store';
 
 const round = (weight) => BigNumber(weight).decimalPlaces(2).toFixed();
-/*
-const stores = {};
 
-const fetchStore = ({ database, token }) => {
-  const tokenStore = stores[token];
-
-  if (tokenStore) {
-    return tokenStore;
-  }
-
-  const { tokens } = mint;
-  const {
-    address,
-    symbol,
-    weight,
-    color = 'black',
-  } = tokens[token];
-
-  const newStore = store({
-    address,
-    color,
-    symbol,
-    weight,
-
-    balance: BigNumber(0),
-  });
-
-  stores[token] = newStore;
-
-  const { account } = eth;
-
-  database.subscribe(`${account}.${address}.balance`, (key, { balance }) => {
-    console.log('GOT BALANCE FOR', key, token, balance, balance.toString());
-    mint.tokens[token].balance = balance;
-    newStore.balance = balance;
-  });
-
-  database.balance({ address: account, token: address });
-
-  return newStore;
-};
-*/
-
-const Asset = ({ token }) => {
-  // const tokenStore = fetchStore({ database, token });
-
+const Asset = ({ decimalShift, token }) => {
   const {
     balance,
     color,
@@ -62,10 +16,8 @@ const Asset = ({ token }) => {
     weight,
   } = mint.tokens[token];
 
-  console.log('FROM STORE', token, balance.toString());
-
   const { amount } = mint;
-  const amt = BigNumber(amount(token)).toFixed();
+  const amt = BigNumber(amount(token, decimalShift)).toFixed();
   const available = !balance.isZero() && balance.isGreaterThanOrEqualTo(amt);
 
   return (
@@ -95,6 +47,7 @@ const Asset = ({ token }) => {
 
 Asset.propTypes = {
   // database: PropTypes.instanceOf(BlockchainDatabase).isRequired,
+  decimalShift: PropTypes.number.isRequired,
   token: PropTypes.string.isRequired,
 };
 
