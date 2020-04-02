@@ -15,9 +15,9 @@
     "release": "npm publish --access=public"
   },
   "dependencies": {
-    "@pie-dao/blockchain": "file:../blockchain",
-    "@pie-dao/eth": "file:../eth",
-    "@pie-dao/utils": "file:../utils",
+    "@pie-dao/blockchain": "^1.0.0",
+    "@pie-dao/eth": "^1.0.3",
+    "@pie-dao/utils": "1.0.0",
     "@risingstack/react-easy-state": "^6.2.0",
     "bignumber.js": "^9.0.0",
     "prop-types": "^15.7.2",
