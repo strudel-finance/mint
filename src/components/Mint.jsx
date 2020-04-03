@@ -22,6 +22,7 @@ const Mint = ({
   text: {
     mint: {
       descriptor,
+      chartHeader,
       liquidityText,
       verb,
     },
@@ -86,15 +87,9 @@ const Mint = ({
       </div>
       <div className="right">
         <div className="column">
-          <h1 className="title">
-            {descriptor}
-            &nbsp;
-            Breakdown
-          </h1>
+          <h1 className="title" dangerouslySetInnerHTML={{ __html: chartHeader }} />
           <Chart />
-          <div className="normal">
-            {liquidityText}
-          </div>
+          <div className="normal" dangerouslySetInnerHTML={{ __html: liquidityText }} />
         </div>
         <div className="column">
           {Object.keys(tokens).map((key) => (
@@ -116,6 +111,7 @@ Mint.defaultProps = {
   text: {
     mint: {
       descriptor: 'Liquidity',
+      chartHeader: 'Allocation',
       liquidityText: '',
       verb: 'Add',
     },
@@ -134,6 +130,7 @@ Mint.propTypes = {
     mint: PropTypes.shape({
       descriptor: PropTypes.string,
       liquidityText: PropTypes.string,
+      chartHeader: PropTypes.string,
       verb: PropTypes.string,
     }),
   }),

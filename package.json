@@ -1,6 +1,6 @@
 {
   "name": "@pie-dao/mint",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "PieDAO's minter components.",
   "main": "dist/index.js",
   "repository": "https://github.com/pie-dao/mint.git",
@@ -15,9 +15,9 @@
     "release": "npm publish --access=public"
   },
   "dependencies": {
-    "@pie-dao/blockchain": "1.0.0",
-    "@pie-dao/eth": "1.1.0",
-    "@pie-dao/utils": "1.0.0",
+    "@pie-dao/blockchain": "^1.0.0",
+    "@pie-dao/eth": "^1.1.0",
+    "@pie-dao/utils": "^1.0.0",
     "@risingstack/react-easy-state": "^6.2.0",
     "bignumber.js": "^9.0.0",
     "prop-types": "^15.7.2",
