@@ -25,7 +25,7 @@ const internal = {
 const logPrefix = (functionName) => `@pie-dao/mint - mint#${functionName}`;
 
 const validateTokenConfig = (name, obj, skipWeight = false) => {
-  const prefix = '@pie-dao/mint - isTokenConfig';
+  const prefix = '@pie-dao/mint - validateTokenConfig';
 
   if (!isPOJO(obj)) {
     const message = `${prefix}: Missing or invalid token config object for ${name}`;
@@ -50,6 +50,18 @@ const validateTokenConfig = (name, obj, skipWeight = false) => {
     if (obj.weight.isGreaterThan(100) || obj.weight.isLessThanOrEqualTo(0)) {
       throw new TypeError(`${prefix}: ${weightMessage}`);
     }
+  }
+};
+
+const validateTotalWeight = (tokens) => {
+  const prefix = '@pie-dao/mint - validateTotalWeight';
+  const keys = Object.keys(tokens);
+  const totalWeight = keys.reduce((acc, key) => acc.plus(tokens[key].weight), BigNumber(0));
+
+  if (totalWeight.isGreaterThan(100)) {
+    throw new TypeError(
+      `${prefix}: Token weights cannot exceed 100. Got: ${totalWeight.toString()}`,
+    );
   }
 };
 
@@ -99,12 +111,8 @@ const mint = store({
       validateTokenConfig(key, tokens[key]);
     });
 
-    const totalWeight = keys.reduce((acc, key) => acc.plus(tokens[key].weight), BigNumber(0));
-    if (totalWeight.isGreaterThan(100)) {
-      throw new TypeError(
-        `${prefix}: Token weights cannot exceed 100. Got: ${totalWeight.toString()}`,
-      );
-    }
+    validateTotalWeight(tokens);
+
     mint.tokens = { ...tokens };
 
     eth.on('accountChanged', (message, data) => {
@@ -154,6 +162,29 @@ const mint = store({
       .multipliedBy(10 ** decimalShift)
       .decimalPlaces(0)
       .toNumber();
+  },
+  updateTokens: (tokens) => {
+    const keys = Object.keys(mint.tokens);
+    const properties = ['amountPerUnit', 'color', 'weight'];
+    const updatedTokens = { ...mint.tokens };
+
+    keys.forEach((key) => {
+      const update = { ...updatedTokens[key] };
+
+      properties.forEach((property) => {
+        if (tokens[key] && tokens[key][property]) {
+          update[property] = tokens[key][property];
+        }
+      });
+
+      validateTokenConfig(key, update);
+
+      updatedTokens[key] = update;
+    });
+
+    validateTotalWeight(updatedTokens);
+
+    mint.tokens = updatedTokens;
   },
 });
 
