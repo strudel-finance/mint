@@ -2,11 +2,10 @@ import BigNumber from 'bignumber.js';
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { amountFormatter } from '@pie-dao/utils';
 import { view } from '@risingstack/react-easy-state';
 
 import mint from '../store';
-
-const round = (weight) => BigNumber(weight).decimalPlaces(2).toFixed();
 
 const Asset = ({ decimalShift, token }) => {
   const {
@@ -17,7 +16,7 @@ const Asset = ({ decimalShift, token }) => {
   } = mint.tokens[token];
 
   const { amount } = mint;
-  const amt = BigNumber(amount(token, decimalShift)).toFixed();
+  const amt = BigNumber(amount(token, decimalShift));
   const available = !balance.isZero() && balance.isGreaterThanOrEqualTo(amt);
 
   return (
@@ -30,15 +29,15 @@ const Asset = ({ decimalShift, token }) => {
           </div>
         </div>
         <div className="asset-amount">
-          {amt}
+          {amountFormatter({ amount: amt, displayDecimals: decimalShift })}
           &nbsp;of&nbsp;
-          {balance.toFixed(6)}
+          {amountFormatter({ amount: balance, displayDecimals: decimalShift })}
           &nbsp;
           {symbol}
         </div>
       </div>
       <div className="asset-weight" style={{ backgroundColor: color }}>
-        {round(weight)}
+        {weight.toFixed(2)}
         %
       </div>
     </div>
