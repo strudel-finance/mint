@@ -78,6 +78,11 @@ const mint = store({
 
   amount: (token, decimalShift) => {
     const { slider, tokens } = mint;
+
+    if (BigNumber(slider).isNaN()) {
+      return BigNumber(0);
+    }
+
     return BigNumber(slider)
       .multipliedBy(tokens[token].amountPerUnit)
       .dividedBy(10 ** decimalShift);
@@ -147,6 +152,11 @@ const mint = store({
         database.balance({ address: account, token: address });
       }, 1000);
     });
+  },
+  inputChange: (evt) => {
+    const { value } = evt.target;
+    console.log('VALUE', value);
+    mint.slider = value;
   },
   sliderChange: (value) => {
     mint.slider = value;
