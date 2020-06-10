@@ -80,7 +80,7 @@ const Mint = ({
         </div>
         <div className="column">
           {Object.keys(tokens).map((key) => (
-            <Asset database={database} key={key} token={key} decimalShift={0} />
+            <Asset database={database} key={key} token={key} decimalShift={6} />
           ))}
         </div>
       </div>

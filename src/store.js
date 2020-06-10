@@ -76,7 +76,7 @@ const mint = store({
   },
   tokens: {},
 
-  amount: (token, decimalShift) => {
+  amount: (token) => {
     const { slider, tokens } = mint;
 
     if (BigNumber(slider).isNaN()) {
@@ -84,8 +84,7 @@ const mint = store({
     }
 
     return BigNumber(slider)
-      .multipliedBy(tokens[token].amountPerUnit)
-      .dividedBy(10 ** decimalShift);
+      .multipliedBy(tokens[token].amountPerUnit);
   },
   init: ({
     database,
