@@ -8,6 +8,7 @@
   "license": "MIT",
   "scripts": {
     "prepack": "yarn build",
+    "prepare": "yarn build",
     "build": "yarn lint && yarn clean && yarn rebuild",
     "clean": "rimraf ./dist",
     "lint": "npx eslint src/*.js src/**/*.jsx src/**/*.js",
