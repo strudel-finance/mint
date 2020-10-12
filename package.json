@@ -7,7 +7,7 @@
   "author": "Dan Matthews <dan@cryptobuilders.io>",
   "license": "MIT",
   "scripts": {
-    "prepare": "yarn build",
+    "prepack": "yarn build",
     "build": "yarn lint && yarn clean && yarn rebuild",
     "clean": "rimraf ./dist",
     "lint": "npx eslint src/*.js src/**/*.jsx src/**/*.js",
