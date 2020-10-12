@@ -26,6 +26,7 @@ const Mint = ({
     slider,
     sliderMax,
     submit,
+    remove,
     tokens,
   } = mint;
 
@@ -68,6 +69,19 @@ const Mint = ({
           }}
         >
           {verb}
+          &nbsp;
+          {descriptor}
+        </button>
+        <button
+          type="button"
+          className="btn"
+          onClick={(e) => {
+            e.preventDefault();
+            console.log('firing remove');
+            remove();
+          }}
+        >
+          Remove
           &nbsp;
           {descriptor}
         </button>

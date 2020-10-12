@@ -74,6 +74,11 @@ const mint = store({
       `${logPrefix('submit')} is not implemented. Please pass it to ${logPrefix('init')}`,
     );
   },
+  remove: () => {
+    throw new Error(
+      `${logPrefix('remove')} is not implemented. Please pass it to ${logPrefix('init')}`,
+    );
+  },
   tokens: {},
 
   amount: (token) => {
@@ -90,6 +95,7 @@ const mint = store({
     database,
     mintable,
     submit,
+    remove,
     tokens,
   }) => {
     const prefix = logPrefix('init');
@@ -105,7 +111,9 @@ const mint = store({
     internal.database = database;
 
     validateIsFunction(submit, { prefix, message: '\'submit\' is not a function.' });
-    mint.submit = submit;
+    validateIsFunction(remove, { prefix, message: '\'remove\' is not a function.' });
+
+    mint.remove = remove;
 
     validateTokenConfig('mintable', mintable, true);
     mint.mintable = mintable;
