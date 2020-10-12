@@ -113,6 +113,8 @@ const mint = store({
     validateIsFunction(submit, { prefix, message: '\'submit\' is not a function.' });
     validateIsFunction(remove, { prefix, message: '\'remove\' is not a function.' });
 
+    mint.submit = submit;
+
     mint.remove = remove;
 
     validateTokenConfig('mintable', mintable, true);
